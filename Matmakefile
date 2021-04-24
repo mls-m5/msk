@@ -1,0 +1,33 @@
+
+# using matmake2: https://github.com/laserskold/matmake2
+
+libmsk
+  src = src/*.cpp
+  command = [static]
+  out = libmsk
+
+msk
+  out = msk
+  in = @libmsk
+  src =
+    src/main/*.cpp
+  command = [exe]
+
+line_reader_test
+  out = line_reader_test
+  in = @libmsk
+  src = test/line_reader_test.cpp
+  command = [test]
+
+all
+  in =
+    @msk
+    @line_reader_test
+  includes =
+    include
+    src
+    lib/
+  config =
+    c++17
+    Wall
+
