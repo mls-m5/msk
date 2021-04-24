@@ -63,12 +63,22 @@ struct Tokenizer {
 
         switch (c) {
         case '{':
-            _content += c;
-            sendToken(Token::BraceBegin);
+            sendWithChar(c, Token::BraceBegin);
             break;
         case '}':
-            _content += c;
-            sendToken(Token::BraceEnd);
+            sendWithChar(c, Token::BraceEnd);
+            break;
+        case '(':
+            sendWithChar(c, Token::ParenBegin);
+            break;
+        case ')':
+            sendWithChar(c, Token::ParenEnd);
+            break;
+        case '[':
+            sendWithChar(c, Token::BracketBegin);
+            break;
+        case ']':
+            sendWithChar(c, Token::BracketEnd);
             break;
         case '=':
         case '+':
@@ -81,13 +91,11 @@ struct Tokenizer {
             break;
 
         case ';':
-            _content += c;
-            sendToken(Token::Semicolon);
+            sendWithChar(c, Token::Semicolon);
             break;
 
         case ',':
-            _content += c;
-            sendToken(Token::Coma);
+            sendWithChar(c, Token::Coma);
             break;
 
         case ' ':
@@ -168,6 +176,12 @@ struct Tokenizer {
             break;
         }
         return Token::Word;
+    }
+
+    void sendWithChar(char c, Token::Type type) {
+        _content += c;
+        sendToken(type);
+        ;
     }
 
     void sendToken(Token::Type type = Token::None) {

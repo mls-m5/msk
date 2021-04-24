@@ -1,8 +1,8 @@
 
 
 class Apa {
-    _x : double = 0;
-    _y : double = 0;
+    let _x : double = 0;
+    let _y : double = 0;
 };
 
 export func move(Apa &, double x, double y) {

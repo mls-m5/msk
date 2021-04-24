@@ -3,7 +3,7 @@
 #include <string>
 
 struct Token {
-    enum Type : char {
+    enum Type : short {
         None,
         Word,
         StringLiteral,
@@ -17,6 +17,12 @@ struct Token {
 
         BraceBegin,
         BraceEnd,
+
+        ParenBegin,
+        ParenEnd,
+
+        BracketBegin,
+        BracketEnd,
 
         Semicolon,
         Coma,

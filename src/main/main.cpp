@@ -34,7 +34,10 @@ int main(int argc, char **argv) {
     const auto settings = Settings{argc, argv};
 
     if (settings.operation == Settings::Tokenize) {
-        auto f = [](Token token) { std::cout << token.content << "\n"; };
+        auto f = [](Token token) {
+            std::cout << token.content << "\t";
+            std::cout << token.type << "\n";
+        };
         read(settings.inputFiles.front(), tokenize(f));
     }
 }
