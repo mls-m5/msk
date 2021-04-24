@@ -1,0 +1,26 @@
+ame: C/C++ CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: update submodules
+      run: git submodule update --init
+    - name: clone matmake
+      run: git clone https://github.com/laserskold/matmake2 --recurse-submodules
+    - name: build matmake2
+      run: make install
+      working-directory: matmake2
+    - name: build clang
+      run: matmake2 --target clang --test
+    - name: build gcc
+      run: matmake2 --target gcc --test
