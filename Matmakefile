@@ -19,10 +19,17 @@ line_reader_test
   src = test/line_reader_test.cpp
   command = [test]
 
+tokenizer_test
+  out = tokenizer_test
+  in = @libmsk
+  src = test/tokenizer_test.cpp
+  command = [test]
+
 all
   in =
     @msk
     @line_reader_test
+    @tokenizer_test
   includes =
     include
     src
