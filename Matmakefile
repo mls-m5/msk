@@ -25,11 +25,18 @@ tokenizer_test
   src = test/tokenizer_test.cpp
   command = [test]
 
+grouper_test
+  out = grouper_test
+  in = @libmsk
+  src = test/grouper_test.cpp
+  command = [test]
+
 all
   in =
     @msk
     @line_reader_test
     @tokenizer_test
+    @grouper_test
   includes =
     include
     src

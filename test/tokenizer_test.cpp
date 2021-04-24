@@ -1,4 +1,3 @@
-#define DO_NOT_CATCH_ERRORS
 
 #include "filesystem.h"
 #include "mls-unit-test/unittest.h"

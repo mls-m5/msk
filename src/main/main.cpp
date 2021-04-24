@@ -1,13 +1,15 @@
 #include "filesystem.h"
+#include "grouper.h"
+#include "linereader.h"
+#include "tokenizer.h"
 #include <iostream>
-#include <linereader.h>
 #include <string>
-#include <tokenizer.h>
 #include <vector>
 
 struct Settings {
     enum Operation {
         Tokenize,
+        Group,
     };
 
     Operation operation;
@@ -22,6 +24,9 @@ struct Settings {
 
             if (arg == "--tokenize") {
                 operation = Operation::Tokenize;
+            }
+            if (arg == "--group") {
+                operation = Operation::Group;
             }
             else {
                 inputFiles.push_back(arg);
@@ -39,5 +44,9 @@ int main(int argc, char **argv) {
             std::cout << token.type << "\n";
         };
         read(settings.inputFiles.front(), tokenize(f));
+    }
+    else if (settings.operation == Settings::Group) {
+        auto f = [](Ast ast) { std::cout << ast << std::endl; };
+        read(settings.inputFiles.front(), tokenize(grouper(f)));
     }
 }

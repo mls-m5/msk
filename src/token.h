@@ -17,12 +17,15 @@ struct Token {
 
         BraceBegin,
         BraceEnd,
+        BraceGroup,
 
         ParenBegin,
         ParenEnd,
+        ParenGroup,
 
         BracketBegin,
         BracketEnd,
+        BracketGroup,
 
         Semicolon,
         Coma,
@@ -30,9 +33,10 @@ struct Token {
         NumericLiteral,
     };
 
-    std::string_view leadingSpace;
-    std::string_view content;
-    std::string_view trailingSpace;
+    std::string content;
+
+    std::string leadingSpace;
+    std::string trailingSpace;
 
     size_t row, col;
 

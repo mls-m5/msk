@@ -8,6 +8,9 @@ namespace {
 
 auto keywordMap = std::vector<std::pair<std::string_view, Token::Type>>{
     {"func", Token::Func},
+    {"var", Token::Var},
+    {"let", Token::Let},
+    {"const", Token::Const},
 };
 
 bool isAlpha(char c) {
@@ -189,9 +192,9 @@ struct Tokenizer {
             return;
         }
         _consumer(Token{
-            .leadingSpace = _leadingSpace,
-            .content = _content,
-            .trailingSpace = _trailingSpace,
+            .content = std::move(_content),
+            .leadingSpace = std::move(_leadingSpace),
+            .trailingSpace = std::move(_trailingSpace),
             .row = _row,
             .col = _colStart,
             .type = type == Token::None ? getType() : type,
@@ -267,5 +270,5 @@ private:
 } // namespace
 
 LineConsumer tokenize(TokenConsumer consumer) {
-    return Tokenizer{consumer};
+    return Tokenizer{std::move(consumer)};
 }
