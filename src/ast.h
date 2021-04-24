@@ -4,6 +4,8 @@
 #include <list>
 #include <ostream>
 
+//! A abstract source tre node. These can be added to eachother to create a tree
+//! structure
 struct Ast {
     Ast() = default;
     Ast(const Ast &) = delete;

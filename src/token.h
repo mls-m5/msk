@@ -2,6 +2,7 @@
 
 #include <string>
 
+//! Next after a character, the Token is the smallest unit of code
 struct Token {
     enum Type : short {
         None,
