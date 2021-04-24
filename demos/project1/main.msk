@@ -1,0 +1,19 @@
+
+
+class Apa {
+    _x : double = 0;
+    _y : double = 0;
+};
+
+export func move(Apa &, double x, double y) {
+    _x = x;
+    _y = y;
+}
+
+func main(std::view<char *> args)->void {
+    let x = 10;
+
+    print("hello there! {}\n", x);
+
+    return 0;
+}

@@ -34,6 +34,8 @@ all
     include
     src
     lib/
+  copy =
+    demos
   config =
     c++17
     Wall

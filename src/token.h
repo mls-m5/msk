@@ -18,6 +18,10 @@ struct Token {
         BraceBegin,
         BraceEnd,
 
+        Semicolon,
+        Coma,
+
+        NumericLiteral,
     };
 
     std::string_view leadingSpace;
