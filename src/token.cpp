@@ -11,6 +11,7 @@ auto createVector() {
     v[Token::Let] = "let";
     v[Token::Return] = "return";
 
+    v[Token::StringLiteral] = "string";
     v[Token::Operator] = "operator";
     v[Token::Function] = "function";
     v[Token::Semicolon] = "semicolon";

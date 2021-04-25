@@ -38,6 +38,7 @@ struct Tokenizer {
         Operator,
         Space,
         Numeric,
+        String,
     };
 
     Tokenizer(TokenConsumer consumer)
@@ -54,12 +55,12 @@ struct Tokenizer {
         else {
             sendToken();
 
-            defaultState(c);
+            stateDefault(c);
         }
     }
 
     //! Entry state for all tokens
-    inline void defaultState(char c) {
+    inline void stateDefault(char c) {
         if (isAlpha(c)) {
             startNewToken(c, State::Word);
             return;
@@ -122,6 +123,11 @@ struct Tokenizer {
         case '9':
             _content += c;
             _state = State::Numeric;
+            break;
+
+        case '\"':
+            _content += c;
+            _state = State::String;
 
             break;
         default:
@@ -130,13 +136,13 @@ struct Tokenizer {
         }
     }
 
-    inline void operatorState(char c) {
+    inline void stateOperator(char c) {
         // Handle multiple character operators in the future
 
         startNewToken(c);
     }
 
-    inline void spaceState(char c) {
+    inline void stateSpace(char c) {
         if (isspace(c)) {
             if (_content.empty()) {
                 _leadingSpace += c;
@@ -157,12 +163,19 @@ struct Tokenizer {
         }
     }
 
-    inline void numericState(char c) {
+    inline void stateNumeric(char c) {
         if (isdigit(c) || c == '.') {
             _content += c;
         }
         else {
             startNewToken(c);
+        }
+    }
+
+    inline void stateString(char c) {
+        _content += c;
+        if (c == '\"') {
+            sendToken(Token::StringLiteral);
         }
     }
 
@@ -174,6 +187,8 @@ struct Tokenizer {
             return Token::None; // Should not happend
         case State::Numeric:
             return Token::NumericLiteral;
+        case State::String:
+            return Token::StringLiteral;
         case State::Word:
             break;
         case State::Default:
@@ -190,7 +205,6 @@ struct Tokenizer {
     void sendWithChar(char c, Token::Type type) {
         _content += c;
         sendToken(type);
-        ;
     }
 
     void sendToken(Token::Type type = Token::None) {
@@ -232,19 +246,23 @@ struct Tokenizer {
     void handleCharacter(char c) {
         switch (_state) {
         case State::Default:
-            defaultState(c);
+            stateDefault(c);
             break;
         case State::Word:
             wordState(c);
             break;
         case State::Operator:
-            operatorState(c);
+            stateOperator(c);
             break;
         case State::Space:
-            spaceState(c);
+            stateSpace(c);
             break;
         case State::Numeric:
-            numericState(c);
+            stateNumeric(c);
+            break;
+        case State::String:
+            stateString(c);
+            break;
         }
     }
 

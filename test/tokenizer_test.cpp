@@ -63,11 +63,25 @@ TEST_CASE("numeric literal") {
 
 TEST_CASE("keyword") {
     {
-        auto consumer = [](Token token) { EXPECT_EQ(token.type, Token::Let); };
+        auto consumer = [](Token token) {
+            std::cout << token.content << "\n";
+            EXPECT_EQ(token.type, Token::Let);
+        };
 
         auto f = tokenize(consumer);
         f({"let"});
     }
+}
+
+TEST_CASE("string literal") {
+
+    auto consumer = [](Token token) {
+        std::cout << token.content << "\n";
+        EXPECT_EQ(token.type, Token::StringLiteral);
+    };
+
+    auto f = tokenize(consumer);
+    f({"\"hello there\""});
 }
 
 TEST_SUIT_END
