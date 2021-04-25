@@ -17,12 +17,6 @@ struct Grouper {
         _translationUnit.token.type = Token::TranslationUnit;
     }
 
-    ~Grouper() {
-        if (!_translationUnit.children.empty()) {
-            _consumer(std::move(_translationUnit));
-        }
-    }
-
     void beginGroup(Token &&token) {
         if (_stack.empty()) {
             _root = Ast::fromToken(std::move(token));

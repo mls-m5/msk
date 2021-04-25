@@ -23,7 +23,9 @@ auto createVector() {
     v[Token::ParenGroup] = "paren group";
     v[Token::BracketGroup] = "bracket group";
     v[Token::ImportStatement] = "import statement";
+    v[Token::ExportStatement] = "export statement";
     v[Token::Import] = "import";
+    v[Token::Export] = "export";
 
     v[Token::TranslationUnit] = "translation unit";
 

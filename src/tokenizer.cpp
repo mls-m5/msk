@@ -12,6 +12,7 @@ auto keywordMap = std::vector<std::pair<std::string_view, Token::Type>>{
     {"let", Token::Let},
     {"const", Token::Const},
     {"import", Token::Import},
+    {"export", Token::Export},
 };
 
 bool isAlpha(char c) {
@@ -270,7 +271,10 @@ struct Tokenizer {
     // The enty point
     void operator()(Line line) {
         if (line.eof()) {
-            sendToken(Token::Eof);
+            sendToken();
+            Token eof;
+            eof.type = Token::Eof;
+            _consumer(eof);
             return;
         }
 

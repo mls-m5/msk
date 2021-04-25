@@ -43,7 +43,7 @@ all
     @line_reader_test
     @tokenizer_test
     @grouper_test
-#    @parser_test
+    @parser_test
   includes =
     include
     src

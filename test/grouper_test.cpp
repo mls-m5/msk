@@ -27,6 +27,11 @@ TEST_CASE("basic parenthesis") {
             .content = ")",
             .type = Token::ParenEnd,
         });
+
+        f({
+            .content = {},
+            .type = Token::Eof,
+        });
     }
 
     EXPECT_EQ(count, 1);
@@ -55,6 +60,11 @@ TEST_CASE("basic braces") {
             .content = "}",
             .type = Token::BraceEnd,
         });
+
+        f({
+            .content = {},
+            .type = Token::Eof,
+        });
     }
 
     EXPECT_EQ(count, 1);
@@ -81,6 +91,11 @@ TEST_CASE("basic brackets") {
         f({
             .content = "}",
             .type = Token::BracketEnd,
+        });
+
+        f({
+            .content = {},
+            .type = Token::Eof,
         });
     }
 
@@ -117,6 +132,11 @@ TEST_CASE("nested braces") {
         f({
             .content = "}",
             .type = Token::BraceEnd,
+        });
+
+        f({
+            .content = {},
+            .type = Token::Eof,
         });
     }
 

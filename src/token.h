@@ -16,6 +16,7 @@ struct Token {
         Let,
         Const,
         Import,
+        Export,
         Return,
 
         BraceBegin,

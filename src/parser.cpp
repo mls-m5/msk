@@ -3,110 +3,127 @@
 
 namespace {
 
-struct Parser {
-    enum class State {
-        Default,
-        VariableDeclaration,
-        Function,
-        Import,
-    };
+using iterator = std::list<Ast>::iterator;
 
-    Parser(AstConsumer _consumer)
-        : _consumer(std::move(_consumer)) {}
+enum class State {
+    Default,
+    VariableDeclaration,
+    Function,
+    Import,
+};
 
-    void stateDefault(Ast ast) {
-        switch (ast.token.type) {
-        case Token::Let:
-            _current = std::move(ast);
-            _current.token.type = Token::VariableDeclaration;
-            _state = State::VariableDeclaration;
-            break;
-        case Token::Func:
-            _current = std::move(ast);
-            _current.token.type = Token::Function;
-            _state = State::Function;
-            break;
-        case Token::Import:
-            _current = std::move(ast);
-            _current.token.type = Token::ImportStatement;
-            _state = State::Import;
-            break;
-        default:
-            _consumer(std::move(ast));
-        }
+enum class Action {
+    Reduce,
+    Next,
+};
+
+void handle(Ast &ast, iterator &it);
+
+void reduce(Ast &ast,
+            iterator begin,
+            iterator end,
+            Token::Type type,
+            bool hasEndToken) {
+    if (begin == end || std::next(begin) == end) {
+        return;
     }
 
-    // And statement and use the last ast-node as end token
-    void endStatement(Ast ast) {
-        _current.end = std::move(ast.token);
-        endStatement();
+    else {
+        Ast &first = *begin;
+        first.token.type = type;
+        first.children.splice(
+            first.children.begin(), ast.children, std::next(begin), end);
     }
+}
 
-    void endStatement() {
-        _consumer(std::move(_current));
-        _state = State::Default;
-        _current = {};
-    }
-
-    void stateVariableDeclaration(Ast ast) {
-        if (ast.token.type == Token::Semicolon) {
-            endStatement(std::move(ast));
-        }
-        else {
-            _current.children.push_back(std::move(ast));
-        }
-    }
-
-    void stateFunction(Ast ast) {
-        _current.children.push_back(std::move(ast));
-        switch (ast.token.type) {
-        case Token::BraceGroup:
-            _current.children.push_back(std::move(ast));
-            endStatement();
-            break;
-        case Token::Semicolon:
-            _current.token.type = Token::FunctionDefinition;
-            endStatement(std::move(ast));
-            break;
-        default:
-            _current.children.push_back(std::move(ast));
-        }
-    }
-
-    void statetImport(Ast ast) {
-        if (ast.token.type == Token::Semicolon) {
-            endStatement(std::move(ast));
-        }
-        else {
-            _current.children.push_back(std::move(ast));
-        }
-    }
-
-    //! Todo: Rewrite
-    void operator()(Ast ast) {
-        if (ast.token.type == Token::None) {
+void handleFunction(Ast &ast, iterator &it) {
+    for (auto end = it; end != ast.children.end(); ++end) {
+        if (end->token.type == Token::BraceGroup) {
+            reduce(ast, it, std::next(end), Token::Function, false);
             return;
         }
-        switch (_state) {
-        case State::Default:
-            stateDefault(std::move(ast));
-            break;
-        case State::VariableDeclaration:
-            stateVariableDeclaration(std::move(ast));
-            break;
-        case State::Function:
-            stateFunction(std::move(ast));
-            break;
-        case State::Import:
-            statetImport(std::move(ast));
-            break;
+        else if (end->token.type == Token::Semicolon) {
+            reduce(ast, it, std::next(end), Token::FunctionDefinition, true);
+            return;
         }
+    }
+    throw std::runtime_error{"expected ; or {"};
+}
+
+void handleImport(Ast &ast, iterator &it) {
+    for (auto end = it; end != ast.children.end(); ++end) {
+        if (end->token.type == Token::Semicolon) {
+            reduce(ast, it, std::next(end), Token::ImportStatement, true);
+            return;
+        }
+    }
+    throw std::runtime_error{"expected ;"};
+}
+
+void handleVariableDeclaration(Ast &ast, iterator &it) {
+    for (auto end = it; end != ast.children.end(); ++end) {
+        if (end->token.type == Token::Semicolon) {
+            reduce(ast, it, std::next(end), Token::VariableDeclaration, true);
+            return;
+        }
+    }
+    throw std::runtime_error{"expected ;"};
+}
+
+void handleExport(Ast &ast, iterator &it) {
+    auto next = std::next(it);
+
+    if (next == ast.children.end()) {
+        std::runtime_error{"export expect statement"};
+    }
+
+    handle(ast, next); // Group forward
+    reduce(ast, it, std::next(it, 2), Token::ExportStatement, false);
+}
+
+void handle(Ast &ast, iterator &it) {
+    switch (it->token.type) {
+    case Token::Func:
+        handleFunction(ast, it);
+        ++it;
+        break;
+    case Token::Import:
+        handleImport(ast, it);
+        ++it;
+        break;
+    case Token::Let:
+    case Token::Var:
+        handleVariableDeclaration(ast, it);
+        ++it;
+        break;
+    case Token::Export:
+        handleExport(ast, it);
+        ++it;
+        break;
+    default:
+        throw std::runtime_error{"unexpected token " + it->token.content};
+    }
+}
+
+//! Recursively group ast nodes to more complex structures
+void group(Ast &ast) {
+    for (auto it = ast.children.begin(); it != ast.children.end();) {
+        handle(ast, it);
+    }
+}
+
+struct Parser {
+    Parser(AstConsumer consumer)
+        : _consumer(consumer) {}
+
+    //! Main entrypoint will only be called once (hopefully
+    void operator()(Ast ast) {
+        group(ast);
+        _consumer(std::move(ast));
     }
 
 private:
     AstConsumer _consumer;
-    State _state = State::Default;
-    Ast _current;
 };
 
 } // namespace
