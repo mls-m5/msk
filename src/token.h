@@ -32,6 +32,22 @@ struct Token {
         Coma,
 
         NumericLiteral,
+
+        // Composite values
+        Function,
+        ForLoop,
+        WhileLoop,
+        IfStatement,
+        IfElseStatement,
+        SwitchStatement,
+
+        ExportStatement,
+
+        Expression,
+
+        VariableDeclaration,
+        Name,
+
     };
 
     std::string content;

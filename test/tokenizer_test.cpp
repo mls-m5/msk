@@ -61,4 +61,13 @@ TEST_CASE("numeric literal") {
     }
 }
 
+TEST_CASE("keyword") {
+    {
+        auto consumer = [](Token token) { EXPECT_EQ(token.type, Token::Let); };
+
+        auto f = tokenize(consumer);
+        f({"let"});
+    }
+}
+
 TEST_SUIT_END

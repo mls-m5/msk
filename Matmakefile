@@ -31,12 +31,19 @@ grouper_test
   src = test/grouper_test.cpp
   command = [test]
 
+parser_test
+  out = parser_test
+  in = @libmsk
+  src = test/parser_test.cpp
+  command = [test]
+
 all
   in =
     @msk
     @line_reader_test
     @tokenizer_test
     @grouper_test
+    @parser_test
   includes =
     include
     src

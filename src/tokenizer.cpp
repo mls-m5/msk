@@ -171,14 +171,19 @@ struct Tokenizer {
             return Token::Operator;
         case State::Space:
             return Token::None; // Should not happend
-        case State::Word:
-            return Token::Word;
         case State::Numeric:
             return Token::NumericLiteral;
+        case State::Word:
+            break;
         case State::Default:
             break;
         }
-        return Token::Word;
+        if (auto k = getKeyword(_content); k == Token::None) {
+            return Token::Word;
+        }
+        else {
+            return k;
+        }
     }
 
     void sendWithChar(char c, Token::Type type) {
@@ -191,13 +196,14 @@ struct Tokenizer {
         if (_content.empty()) {
             return;
         }
+        type = (type == Token::None) ? getType() : type;
         _consumer(Token{
             .content = std::move(_content),
             .leadingSpace = std::move(_leadingSpace),
             .trailingSpace = std::move(_trailingSpace),
             .row = _row,
             .col = _colStart,
-            .type = type == Token::None ? getType() : type,
+            .type = type,
         });
 
         _colStart = _col + 1;
