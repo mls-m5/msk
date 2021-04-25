@@ -7,13 +7,16 @@ This is what the first test would be expected to look like.
 
 apa.msk
 ```c++
-class Apa {
-    let _x : double = 0;
-    let _y : double = 0;
+export class Apa {
+    let x : double = 0;
+    let y : double = 0;
 };
 
+export func Apa(public double x, public double y) {
+}
+
 export func move(Apa &, double x, double y) {
-    _x = x;
+    _x = x; // '_' prefix for member variables
     _y = y;
 }
 
@@ -24,9 +27,14 @@ main.msk:
 import apa;
 
 func main(std::view<std::string_view> args) -> void {
-    let x = 10;
+    let apa = Apa{
+       .x = 0,
+       .y = 1,
+    };
+    
+    apa.move(10, 20);
 
-    print("hello there! {}\n", x);
+    print("hello there! {}, {}\n", apa.x, apa.y);
 
     return 0;
 }
@@ -41,3 +49,4 @@ Future goals (will probably never be reached)
  * Templates/meta programming
  * A standard lib for printing, vectors and other fun stuff.
  * Runtime performance
+

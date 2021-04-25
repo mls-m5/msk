@@ -1,0 +1,12 @@
+
+export class Apa {
+    let x : double = 0;
+    let y : double = 0;
+};
+
+export func Apa(public double x, public double y) {}
+
+export func move(Apa &, double x, double y) {
+    _x = x; // '_' prefix for member variables
+    _y = y;
+}

@@ -1,19 +1,15 @@
 
-
-class Apa {
-    let _x : double = 0;
-    let _y : double = 0;
-};
-
-export func move(Apa &, double x, double y) {
-    _x = x;
-    _y = y;
-}
+import apa;
 
 func main(std::view<std::string_view> args)->void {
-    let x = 10;
+    let apa = Apa{
+        .x = 0,
+        .y = 1,
+    };
 
-    print("hello there! {}\n", x);
+    apa.move(10, 20);
+
+    print("hello there! {}, {}\n", apa.x, apa.y);
 
     return 0;
 }
