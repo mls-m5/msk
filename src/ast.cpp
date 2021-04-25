@@ -11,7 +11,8 @@ void print(std::ostream &stream, const Ast &ast, size_t depth) {
         return stream;
     };
 
-    indent() << ast.token.content << "\t" << ast.token.type << "\n";
+    indent() << ast.token.content << "\t" << ast.token.type << "\t"
+             << typeName(ast.token.type) << "\n";
 
     for (auto &c : ast.children) {
         print(stream, c, depth + 1);

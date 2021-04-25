@@ -15,6 +15,8 @@ struct Token {
         Var,
         Let,
         Const,
+        Import,
+        Return,
 
         BraceBegin,
         BraceEnd,
@@ -35,12 +37,14 @@ struct Token {
 
         // Composite values
         Function,
+        FunctionDefinition,
         ForLoop,
         WhileLoop,
         IfStatement,
         IfElseStatement,
         SwitchStatement,
 
+        ImportStatement,
         ExportStatement,
 
         Expression,
@@ -48,6 +52,7 @@ struct Token {
         VariableDeclaration,
         Name,
 
+        Last,
     };
 
     std::string content;
@@ -59,3 +64,5 @@ struct Token {
 
     Type type;
 };
+
+std::string_view typeName(Token::Type);

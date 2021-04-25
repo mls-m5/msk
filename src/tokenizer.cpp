@@ -11,6 +11,7 @@ auto keywordMap = std::vector<std::pair<std::string_view, Token::Type>>{
     {"var", Token::Var},
     {"let", Token::Let},
     {"const", Token::Const},
+    {"import", Token::Import},
 };
 
 bool isAlpha(char c) {

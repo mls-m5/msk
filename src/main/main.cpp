@@ -1,6 +1,7 @@
 #include "filesystem.h"
 #include "grouper.h"
 #include "linereader.h"
+#include "parser.h"
 #include "tokenizer.h"
 #include <iostream>
 #include <string>
@@ -10,6 +11,7 @@ struct Settings {
     enum Operation {
         Tokenize,
         Group,
+        PrintAst,
     };
 
     Operation operation;
@@ -25,8 +27,11 @@ struct Settings {
             if (arg == "--tokenize") {
                 operation = Operation::Tokenize;
             }
-            if (arg == "--group") {
+            else if (arg == "--group") {
                 operation = Operation::Group;
+            }
+            else if (arg == "--print-ast") {
+                operation = Operation::PrintAst;
             }
             else {
                 inputFiles.push_back(arg);
@@ -38,15 +43,24 @@ struct Settings {
 int main(int argc, char **argv) {
     const auto settings = Settings{argc, argv};
 
-    if (settings.operation == Settings::Tokenize) {
+    switch (settings.operation) {
+    case Settings::Tokenize: {
         auto f = [](Token token) {
             std::cout << token.content << "\t";
             std::cout << token.type << "\n";
         };
         read(settings.inputFiles.front(), tokenize(f));
+        break;
     }
-    else if (settings.operation == Settings::Group) {
+    case Settings::Group: {
         auto f = [](Ast ast) { std::cout << ast << std::endl; };
         read(settings.inputFiles.front(), tokenize(grouper(f)));
+        break;
+    }
+    case Settings::PrintAst: {
+        auto f = [](Ast ast) { std::cout << ast << std::endl; };
+        read(settings.inputFiles.front(), tokenize(grouper(parser(f))));
+        break;
+    }
     }
 }
