@@ -25,6 +25,8 @@ auto createVector() {
     v[Token::ImportStatement] = "import statement";
     v[Token::Import] = "import";
 
+    v[Token::TranslationUnit] = "translation unit";
+
     return v;
 }
 

@@ -9,6 +9,8 @@ void read(filesystem::path path, LineConsumer consumer) {
     for (std::string line; std::getline(file, line); ++row) {
         consumer({std::move(line), row});
     }
+
+    consumer({{}, Line::npos});
 }
 
 void readString(std::string_view str, LineConsumer consumer) {
@@ -18,4 +20,6 @@ void readString(std::string_view str, LineConsumer consumer) {
     for (std::string line; std::getline(ss, line); ++row) {
         consumer({std::move(line), row});
     }
+
+    consumer({{}, Line::npos});
 }

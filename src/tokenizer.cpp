@@ -212,6 +212,7 @@ struct Tokenizer {
             return;
         }
         type = (type == Token::None) ? getType() : type;
+
         _consumer(Token{
             .content = std::move(_content),
             .leadingSpace = std::move(_leadingSpace),
@@ -268,6 +269,11 @@ struct Tokenizer {
 
     // The enty point
     void operator()(Line line) {
+        if (line.eof()) {
+            sendToken(Token::Eof);
+            return;
+        }
+
         _colStart = _col = 1;
         _row = line.row;
         _content.clear();

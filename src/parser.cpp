@@ -82,6 +82,7 @@ struct Parser {
         }
     }
 
+    //! Todo: Rewrite
     void operator()(Ast ast) {
         if (ast.token.type == Token::None) {
             return;

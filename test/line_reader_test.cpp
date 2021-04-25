@@ -14,7 +14,9 @@ TEST_CASE("read test file") {
 
     auto consume = [&count](Line line) {
         std::cout << line.content << "\n";
-        ++count;
+        if (!line.eof()) {
+            ++count;
+        }
     };
 
     read(filename, consume);

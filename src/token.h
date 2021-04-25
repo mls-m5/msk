@@ -52,6 +52,10 @@ struct Token {
         VariableDeclaration,
         Name,
 
+        TranslationUnit,
+
+        Eof,
+
         Last,
     };
 

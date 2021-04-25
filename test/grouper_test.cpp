@@ -15,20 +15,23 @@ TEST_CASE("basic parenthesis") {
         ++count;
     };
 
-    auto f = grouper(consumer);
+    {
+        auto f = grouper(consumer);
 
-    f({
-        .content = "(",
-        .type = Token::ParenBegin,
-    });
+        f({
+            .content = "(",
+            .type = Token::ParenBegin,
+        });
 
-    f({
-        .content = ")",
-        .type = Token::ParenEnd,
-    });
+        f({
+            .content = ")",
+            .type = Token::ParenEnd,
+        });
+    }
 
     EXPECT_EQ(count, 1);
-    EXPECT_EQ(result.token.type, Token::ParenGroup);
+    EXPECT_EQ(result.children.size(), 1);
+    EXPECT_EQ(result.children.front().token.type, Token::ParenGroup);
 }
 
 TEST_CASE("basic braces") {
@@ -40,20 +43,22 @@ TEST_CASE("basic braces") {
         ++count;
     };
 
-    auto f = grouper(consumer);
+    {
+        auto f = grouper(consumer);
 
-    f({
-        .content = "{",
-        .type = Token::BraceBegin,
-    });
+        f({
+            .content = "{",
+            .type = Token::BraceBegin,
+        });
 
-    f({
-        .content = "}",
-        .type = Token::BraceEnd,
-    });
+        f({
+            .content = "}",
+            .type = Token::BraceEnd,
+        });
+    }
 
     EXPECT_EQ(count, 1);
-    EXPECT_EQ(result.token.type, Token::BraceGroup);
+    EXPECT_EQ(result.children.front().token.type, Token::BraceGroup);
 }
 
 TEST_CASE("basic brackets") {
@@ -65,20 +70,22 @@ TEST_CASE("basic brackets") {
         ++count;
     };
 
-    auto f = grouper(consumer);
+    {
+        auto f = grouper(consumer);
 
-    f({
-        .content = "[",
-        .type = Token::BracketBegin,
-    });
+        f({
+            .content = "[",
+            .type = Token::BracketBegin,
+        });
 
-    f({
-        .content = "}",
-        .type = Token::BracketEnd,
-    });
+        f({
+            .content = "}",
+            .type = Token::BracketEnd,
+        });
+    }
 
     EXPECT_EQ(count, 1);
-    EXPECT_EQ(result.token.type, Token::BracketGroup);
+    EXPECT_EQ(result.children.front().token.type, Token::BracketGroup);
 }
 
 TEST_CASE("nested braces") {
@@ -90,29 +97,31 @@ TEST_CASE("nested braces") {
         ++count;
     };
 
-    auto f = grouper(consumer);
+    {
+        auto f = grouper(consumer);
 
-    f({
-        .content = "{",
-        .type = Token::BraceBegin,
-    });
+        f({
+            .content = "{",
+            .type = Token::BraceBegin,
+        });
 
-    f({
-        .content = "{",
-        .type = Token::BraceBegin,
-    });
+        f({
+            .content = "{",
+            .type = Token::BraceBegin,
+        });
 
-    f({
-        .content = "}",
-        .type = Token::BraceEnd,
-    });
-    f({
-        .content = "}",
-        .type = Token::BraceEnd,
-    });
+        f({
+            .content = "}",
+            .type = Token::BraceEnd,
+        });
+        f({
+            .content = "}",
+            .type = Token::BraceEnd,
+        });
+    }
 
     EXPECT_EQ(count, 1);
-    EXPECT_EQ(result.token.type, Token::BraceGroup);
+    EXPECT_EQ(result.children.front().token.type, Token::BraceGroup);
 }
 
 TEST_SUIT_END

@@ -13,48 +13,45 @@ struct Grouper {
     Grouper &operator=(Grouper &&) = delete;
 
     Grouper(AstConsumer consumer)
-        : _consumer{consumer} {}
-
-    ~Grouper() {
-        flush();
+        : _consumer{consumer} {
+        _translationUnit.token.type = Token::TranslationUnit;
     }
 
-    void flush() {
-        _consumer(Ast{
-            .token = {},
-            .children = {},
-        });
+    ~Grouper() {
+        if (!_translationUnit.children.empty()) {
+            _consumer(std::move(_translationUnit));
+        }
     }
 
     void beginGroup(Token &&token) {
-        if (stack.empty()) {
-            root = Ast::fromToken(std::move(token));
-            stack.push_back(&root);
+        if (_stack.empty()) {
+            _root = Ast::fromToken(std::move(token));
+            _stack.push_back(&_root);
         }
         else {
-            stack.back()->children.emplace_back(
+            _stack.back()->children.emplace_back(
                 Ast::fromToken(std::move(token)));
-            stack.push_back(&stack.back()->children.back());
+            _stack.push_back(&_stack.back()->children.back());
         }
     }
 
     void endGroup(Token &&token, Token::Type type) {
-        if (stack.empty()) {
-            if (root.token.content.empty()) {
+        if (_stack.empty()) {
+            if (_root.token.content.empty()) {
                 throw std::runtime_error{"no matching found for '" +
                                          token.content + "'"};
             }
-            root.end = std::move(token);
-            root.token.type = type;
-            _consumer(std::move(root));
+            _root.end = std::move(token);
+            _root.token.type = type;
+            _translationUnit.children.push_back(std::move(_root));
         }
         else {
-            stack.back()->end = std::move(token);
-            stack.back()->token.type = type;
-            stack.pop_back();
+            _stack.back()->end = std::move(token);
+            _stack.back()->token.type = type;
+            _stack.pop_back();
 
-            if (stack.empty()) {
-                _consumer(std::move(root));
+            if (_stack.empty()) {
+                _translationUnit.children.push_back(std::move(_root));
             }
         }
     }
@@ -79,12 +76,19 @@ struct Grouper {
         case Token::BracketEnd:
             endGroup(std::move(token), Token::BracketGroup);
             break;
+        case Token::Eof:
+            if (!_stack.empty()) {
+                throw std::runtime_error{"unexpected end of file"};
+            }
+            _consumer(std::move(_translationUnit));
+            break;
         default:
-            if (stack.empty()) {
-                _consumer(Ast::fromToken(std::move(token)));
+            if (_stack.empty()) {
+                _translationUnit.children.push_back(
+                    Ast::fromToken(std::move(token)));
             }
             else {
-                stack.back()->children.emplace_back(
+                _stack.back()->children.emplace_back(
                     Ast::fromToken(std::move(token)));
             }
         }
@@ -93,8 +97,10 @@ struct Grouper {
 private:
     AstConsumer _consumer;
 
-    Ast root;
-    std::list<Ast *> stack;
+    Ast _root;
+    std::list<Ast *> _stack;
+
+    Ast _translationUnit;
 };
 
 } // namespace
