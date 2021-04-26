@@ -64,7 +64,7 @@ void handleFunction(Ast &ast, iterator &it) {
             return;
         }
     }
-    throw std::runtime_error{"expected ; or {"};
+    parseError(*it, "expected ; or {");
 }
 
 void handleImport(Ast &ast, iterator &it) {
@@ -74,7 +74,7 @@ void handleImport(Ast &ast, iterator &it) {
             return;
         }
     }
-    throw std::runtime_error{"expected ;"};
+    parseError(*it, "expected ;");
 }
 
 void handleVariableDeclaration(Ast &ast, iterator &it) {
@@ -86,7 +86,7 @@ void handleVariableDeclaration(Ast &ast, iterator &it) {
             return;
         }
     }
-    throw std::runtime_error{"expected ;"};
+    parseError(*it, "expected ;");
 }
 
 void handleExport(Ast &ast, iterator &it) {
@@ -120,7 +120,7 @@ void handle(Ast &ast, iterator &it) {
         ++it;
         break;
     default:
-        throw std::runtime_error{"unexpected token " + it->token.content};
+        parseError(*it, "unexpected token");
     }
 }
 
