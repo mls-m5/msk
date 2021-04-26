@@ -6,19 +6,17 @@ namespace {
 
 using iterator = std::list<Ast>::iterator;
 
-enum class State {
-    Default,
-    VariableDeclaration,
-    Function,
-    Import,
-};
-
-enum class Action {
-    Reduce,
-    Next,
-};
-
 void handle(Ast &ast, iterator &it);
+
+//! Return iterator with result
+iterator handleExpression(Ast &ast, iterator begin, iterator end) {
+    Ast expression;
+    expression.type(Token::Expression);
+
+    expression.children.splice(
+        expression.children.end(), ast.children, begin, end);
+    return ast.children.insert(end, std::move(expression));
+}
 
 void reduce(Ast &ast,
             iterator begin,
@@ -88,6 +86,11 @@ void handleVariableDeclaration(Ast &ast, iterator &it) {
             reduce(ast, it, std::next(end), Token::VariableDeclaration, true);
             expectType(it->front(), Token::Word);
             it->front().type(Token::Name);
+
+            auto assignmentOperator = std::next(it->begin());
+            expectType(*assignmentOperator, Token::Operator);
+            handleExpression(*it, std::next(assignmentOperator), it->end());
+
             return;
         }
     }
@@ -125,6 +128,10 @@ void handle(Ast &ast, iterator &it) {
         ++it;
         break;
     default:
+        //        if (ast.type() != Token::Expression) {
+        //            handleExpression(ast, );
+        //        }
+        ++it;
         parseError(*it, "unexpected token");
     }
 }

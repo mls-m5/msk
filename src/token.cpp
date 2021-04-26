@@ -12,6 +12,7 @@ auto createVector() {
     v[Token::Return] = "return";
 
     v[Token::Name] = "name";
+    v[Token::Expression] = "expr";
 
     v[Token::StringLiteral] = "string";
     v[Token::Operator] = "operator";
