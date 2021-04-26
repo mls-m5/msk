@@ -25,13 +25,13 @@ struct Ast {
 
     //! Change type from one child with one specified type to another type
     //! @return true if found and false
-    bool changeType(Token::Type from, Token::Type to) {
+    std::list<Ast>::iterator changeType(Token::Type from, Token::Type to) {
         if (auto it = find(from); it != children.end()) {
             it->token.type = to;
-            return true;
+            return it;
         }
 
-        return false;
+        return children.end();
     }
 
     std::list<Ast>::iterator find(Token::Type type) {

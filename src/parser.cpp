@@ -46,7 +46,12 @@ void handleFunction(Ast &ast, iterator &it) {
             it->front().type(Token::Name);
 
             it->changeType(Token::ParenGroup, Token::FunctionArguments);
-            it->changeType(Token::BraceGroup, Token::FunctionBody);
+            {
+                auto group =
+                    it->changeType(Token::BraceGroup, Token::FunctionBody);
+                auto begin = group->begin();
+                handle(*group, begin);
+            }
             return;
         }
         else if (end->token.type == Token::Semicolon) {
@@ -76,6 +81,8 @@ void handleVariableDeclaration(Ast &ast, iterator &it) {
     for (auto end = it; end != ast.children.end(); ++end) {
         if (end->type() == Token::Semicolon) {
             reduce(ast, it, std::next(end), Token::VariableDeclaration, true);
+            expectType(it->front(), Token::Word);
+            it->front().type(Token::Name);
             return;
         }
     }
