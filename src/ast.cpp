@@ -18,8 +18,9 @@ void print(std::ostream &stream, const Ast &ast, size_t depth) {
         print(stream, c, depth + 1);
     }
 
-    if (!ast.end.content.empty()) {
-        indent() << ast.end.content << "\t" << ast.end.type << "\t(end group)"
+    if (!ast.endToken.content.empty()) {
+        indent() << ast.endToken.content << "\t" << ast.endToken.type
+                 << "\t(end group)"
                  << "\n";
     }
 }

@@ -1,4 +1,5 @@
 #include "parser.h"
+#include "checks.h"
 #include <memory>
 
 namespace {
@@ -30,7 +31,7 @@ void reduce(Ast &ast,
 
     else {
         Ast &first = *begin;
-        first.token.type = type;
+        first.type(type);
         first.children.splice(
             first.children.begin(), ast.children, std::next(begin), end);
     }
@@ -40,12 +41,20 @@ void handleFunction(Ast &ast, iterator &it) {
     for (auto end = it; end != ast.children.end(); ++end) {
         if (end->token.type == Token::BraceGroup) {
             reduce(ast, it, std::next(end), Token::Function, false);
+
+            expectType(it->front(), Token::Word);
+            it->front().type(Token::Name);
+
             it->changeType(Token::ParenGroup, Token::FunctionArguments);
             it->changeType(Token::BraceGroup, Token::FunctionBody);
             return;
         }
         else if (end->token.type == Token::Semicolon) {
             reduce(ast, it, std::next(end), Token::FunctionDefinition, true);
+
+            expectType(it->front(), Token::Word);
+            it->front().type(Token::Name);
+
             it->changeType(Token::ParenGroup, Token::FunctionArguments);
             return;
         }
@@ -55,7 +64,7 @@ void handleFunction(Ast &ast, iterator &it) {
 
 void handleImport(Ast &ast, iterator &it) {
     for (auto end = it; end != ast.children.end(); ++end) {
-        if (end->token.type == Token::Semicolon) {
+        if (end->type() == Token::Semicolon) {
             reduce(ast, it, std::next(end), Token::ImportStatement, true);
             return;
         }
@@ -65,7 +74,7 @@ void handleImport(Ast &ast, iterator &it) {
 
 void handleVariableDeclaration(Ast &ast, iterator &it) {
     for (auto end = it; end != ast.children.end(); ++end) {
-        if (end->token.type == Token::Semicolon) {
+        if (end->type() == Token::Semicolon) {
             reduce(ast, it, std::next(end), Token::VariableDeclaration, true);
             return;
         }
@@ -76,7 +85,7 @@ void handleVariableDeclaration(Ast &ast, iterator &it) {
 void handleExport(Ast &ast, iterator &it) {
     auto next = std::next(it);
 
-    if (next == ast.children.end()) {
+    if (next == ast.end()) {
         std::runtime_error{"export expect statement"};
     }
 

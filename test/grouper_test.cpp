@@ -10,7 +10,7 @@ TEST_CASE("basic parenthesis") {
     size_t count = 0;
     Ast result;
     auto consumer = [&](Ast ast) {
-        std::cout << ast.token.content << ast.end.content << std::endl;
+        std::cout << ast.token.content << ast.endToken.content << std::endl;
         result = std::move(ast);
         ++count;
     };
@@ -43,7 +43,7 @@ TEST_CASE("basic braces") {
     size_t count = 0;
     Ast result;
     auto consumer = [&](Ast ast) {
-        std::cout << ast.token.content << ast.end.content << std::endl;
+        std::cout << ast.token.content << ast.endToken.content << std::endl;
         result = std::move(ast);
         ++count;
     };
@@ -75,7 +75,7 @@ TEST_CASE("basic brackets") {
     size_t count = 0;
     Ast result;
     auto consumer = [&](Ast ast) {
-        std::cout << ast.token.content << ast.end.content << std::endl;
+        std::cout << ast.token.content << ast.endToken.content << std::endl;
         result = std::move(ast);
         ++count;
     };
@@ -107,7 +107,7 @@ TEST_CASE("nested braces") {
     size_t count = 0;
     Ast result;
     auto consumer = [&](Ast ast) {
-        std::cout << ast.token.content << ast.end.content << std::endl;
+        std::cout << ast.token.content << ast.endToken.content << std::endl;
         result = std::move(ast);
         ++count;
     };

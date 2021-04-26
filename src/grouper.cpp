@@ -35,12 +35,12 @@ struct Grouper {
                 throw std::runtime_error{"no matching found for '" +
                                          token.content + "'"};
             }
-            _root.end = std::move(token);
+            _root.endToken = std::move(token);
             _root.token.type = type;
             _translationUnit.children.push_back(std::move(_root));
         }
         else {
-            _stack.back()->end = std::move(token);
+            _stack.back()->endToken = std::move(token);
             _stack.back()->token.type = type;
             _stack.pop_back();
 

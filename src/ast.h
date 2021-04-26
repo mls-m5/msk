@@ -15,7 +15,7 @@ struct Ast {
 
     Token token;
     std::list<Ast> children;
-    Token end; // end-token if any
+    Token endToken; // end-token if any
 
     static auto fromToken(Token token) {
         return Ast{
@@ -41,6 +41,30 @@ struct Ast {
             }
         }
         return children.end();
+    }
+
+    auto begin() {
+        return children.begin();
+    }
+
+    auto end() {
+        return children.end();
+    }
+
+    auto &front() {
+        return children.front();
+    }
+
+    auto &back() {
+        return children.back();
+    }
+
+    Token::Type type() {
+        return token.type;
+    }
+
+    void type(Token::Type value) {
+        token.type = value;
     }
 };
 
