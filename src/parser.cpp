@@ -32,6 +32,11 @@ void reduce(Ast &ast,
     else {
         Ast &first = *begin;
         first.type(type);
+        if (hasEndToken) {
+            auto endIt = std::prev(end);
+            first.endToken = std::move(endIt->token);
+            ast.children.erase(endIt);
+        }
         first.children.splice(
             first.children.begin(), ast.children, std::next(begin), end);
     }
