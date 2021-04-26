@@ -39,6 +39,8 @@ struct Token {
         // Composite values
         Function,
         FunctionDefinition,
+        FunctionArguments,
+        FunctionBody,
         ForLoop,
         WhileLoop,
         IfStatement,

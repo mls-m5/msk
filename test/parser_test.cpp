@@ -35,7 +35,11 @@ TEST_CASE("function declaration") {
     auto consumer = [](Ast ast) {
         std::cout << ast << "\n";
         EXPECT_FALSE(ast.children.empty());
-        EXPECT_EQ(ast.children.front().token.type, Token::Function);
+        auto &first = ast.children.front();
+        EXPECT_EQ(first.token.type, Token::Function);
+        EXPECT_FALSE(first.children.empty());
+        EXPECT_TRUE(first.find(Token::FunctionArguments) !=
+                    first.children.end());
     };
 
     const auto str = std::string_view{R"_(

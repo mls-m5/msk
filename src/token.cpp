@@ -18,6 +18,8 @@ auto createVector() {
     v[Token::Coma] = "coma";
     v[Token::NumericLiteral] = "numeric";
     v[Token::FunctionDefinition] = "func def";
+    v[Token::FunctionArguments] = "func args";
+    v[Token::FunctionBody] = "func body";
     v[Token::VariableDeclaration] = "var decl";
     v[Token::BraceGroup] = "brace group";
     v[Token::ParenGroup] = "paren group";

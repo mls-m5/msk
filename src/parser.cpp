@@ -40,10 +40,13 @@ void handleFunction(Ast &ast, iterator &it) {
     for (auto end = it; end != ast.children.end(); ++end) {
         if (end->token.type == Token::BraceGroup) {
             reduce(ast, it, std::next(end), Token::Function, false);
+            it->changeType(Token::ParenGroup, Token::FunctionArguments);
+            it->changeType(Token::BraceGroup, Token::FunctionBody);
             return;
         }
         else if (end->token.type == Token::Semicolon) {
             reduce(ast, it, std::next(end), Token::FunctionDefinition, true);
+            it->changeType(Token::ParenGroup, Token::FunctionArguments);
             return;
         }
     }
