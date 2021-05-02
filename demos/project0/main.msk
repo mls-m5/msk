@@ -1,0 +1,7 @@
+func apa(x : double) {
+    x * 10;
+}
+
+func main() {
+    apa(30);
+}

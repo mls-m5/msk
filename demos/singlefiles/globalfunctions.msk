@@ -1,0 +1,8 @@
+#pragma once
+
+extern {
+
+func new<T> (size_t);
+func delete<T> (T*);
+
+}

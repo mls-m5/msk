@@ -1,0 +1,58 @@
+#pragma once
+
+namespace std {
+
+/// Standard library string implemnetation
+/// SSO implementation will follow
+class String {
+    var data : char * = nullptr;
+    var size = 0uz;
+}
+
+
+func String() -> String {
+    return {};
+}
+
+func ~String(String &str) {
+    if (this.data) {
+        delete(this.data);
+    }
+}
+
+func String(c : char *)->String {
+    if (!c) {
+        return {
+            .data = nullptr,
+            .size = 0,
+        }
+    }
+
+    for (var size = 0uz; c[size]; ++size) {
+    }
+
+    return {
+        .data = (size > 0) ? c : nullptr, .size = i,
+    }
+}
+
+func String(size: size_t) -> String {
+    return {
+        .data = new<char>(size);
+        .size = size;
+    }
+}
+
+func size(s : String &) -> size_t {
+    return s.size;
+}
+
+func substr(s : String &, pos: size_t) -> String {
+    if (pos >= s.size()) {
+        return String{};
+    }
+
+    var size = pos.size() - size;
+}
+
+} // namespace std

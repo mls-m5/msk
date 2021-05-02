@@ -1,0 +1,7 @@
+
+extern "C" {
+
+func puts(str : const char *)->int;
+}
+
+func main()->int {}

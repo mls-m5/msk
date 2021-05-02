@@ -1,0 +1,8 @@
+
+func main(args : string[])->int {
+    auto s = string{args[1]};
+
+    auto s2 = s.substr(0, 10);
+
+    print("this is the substring: {} ", s2);
+}
