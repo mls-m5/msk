@@ -6,12 +6,19 @@ libmsk_parser
   command = [static]
   out = libmsk_parser
 
+libmsk_backend
+  src = src/backend/*.cpp
+  command = [static]
+  out = libmsk_backend
+
 msk
   out = msk
   in = @libmsk_parser
   src =
     src/main/*.cpp
   command = [exe]
+
+# ====== Parser tests ===========================
 
 line_reader_test
   out = line_reader_test
@@ -37,6 +44,14 @@ parser_test
   src = test/parser_test.cpp
   command = [test]
 
+# ============ Backend tests =====================
+
+basic_codegen_test
+  out = basic_codegen_test
+  in = @libmsk_backend
+  src = test/basic_codegen_test.cpp
+  command = [test]
+
 all
   in =
     @msk
@@ -44,6 +59,7 @@ all
     @tokenizer_test
     @grouper_test
     @parser_test
+    @basic_codegen_test
   includes =
     include
     src
