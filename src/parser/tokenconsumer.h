@@ -1,6 +1,6 @@
 #pragma once
 
-#include "token.h"
+#include "parser/token.h"
 #include <functional>
 
 using TokenConsumer = std::function<void(Token)>;

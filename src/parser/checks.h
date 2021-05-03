@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ast.h"
+#include "parser/ast.h"
 
 // Todo: Print line number and stuff
 void expectType(const Ast &ast, Token::Type type) {

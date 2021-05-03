@@ -1,8 +1,8 @@
 
 #define DO_NOT_CATCH_ERRORS
 
-#include "grouper.h"
 #include "mls-unit-test/unittest.h"
+#include "parser/grouper.h"
 
 TEST_SUIT_BEGIN
 

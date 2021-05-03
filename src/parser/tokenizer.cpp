@@ -1,6 +1,6 @@
 // Really messy tokenizer.. consider rewriting sometime
 
-#include "tokenizer.h"
+#include "parser/tokenizer.h"
 #include <string_view>
 #include <vector>
 

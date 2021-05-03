@@ -1,8 +1,8 @@
-#include "grouper.h"
-#include "linereader.h"
 #include "mls-unit-test/unittest.h"
-#include "parser.h"
-#include "tokenizer.h"
+#include "parser/grouper.h"
+#include "parser/linereader.h"
+#include "parser/parser.h"
+#include "parser/tokenizer.h"
 #include <string_view>
 
 using namespace std::literals;

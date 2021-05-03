@@ -1,6 +1,6 @@
 #pragma once
 
-#include "token.h"
+#include "parser/token.h"
 #include <list>
 #include <ostream>
 

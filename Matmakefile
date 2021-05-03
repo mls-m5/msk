@@ -1,39 +1,39 @@
 
 # using matmake2: https://github.com/laserskold/matmake2
 
-libmsk
-  src = src/*.cpp
+libmsk_parser
+  src = src/parser/*.cpp
   command = [static]
-  out = libmsk
+  out = libmsk_parser
 
 msk
   out = msk
-  in = @libmsk
+  in = @libmsk_parser
   src =
     src/main/*.cpp
   command = [exe]
 
 line_reader_test
   out = line_reader_test
-  in = @libmsk
+  in = @libmsk_parser
   src = test/line_reader_test.cpp
   command = [test]
 
 tokenizer_test
   out = tokenizer_test
-  in = @libmsk
+  in = @libmsk_parser
   src = test/tokenizer_test.cpp
   command = [test]
 
 grouper_test
   out = grouper_test
-  in = @libmsk
+  in = @libmsk_parser
   src = test/grouper_test.cpp
   command = [test]
 
 parser_test
   out = parser_test
-  in = @libmsk
+  in = @libmsk_parser
   src = test/parser_test.cpp
   command = [test]
 
